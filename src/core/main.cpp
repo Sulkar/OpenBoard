@@ -54,11 +54,11 @@ void ub_message_output(QtMsgType type, const QMessageLogContext& context, const 
 
 #if defined(QT_NO_DEBUG)
     // Suppress qDebug output in release builds
-    if (type != QtDebugMsg)
-    {
-        qt_message_output(type, context, msg);
-    }
-
+//    if (type != QtDebugMsg)
+//    {
+//        qt_message_output(type, context, msg);
+//    }
+    qt_message_output(type, context, msg);
 #else
     // Default output in debug builds
     qt_message_output(type, context, msg);

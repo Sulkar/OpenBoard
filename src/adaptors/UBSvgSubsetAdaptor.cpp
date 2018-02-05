@@ -239,7 +239,7 @@ QString UBSvgSubsetAdaptor::uniboardDocumentNamespaceUriFromVersion(int mFileVer
 UBGraphicsScene* UBSvgSubsetAdaptor::loadScene(UBDocumentProxy* proxy, const int pageIndex)
 {
     QString fileName = proxy->persistencePath() + UBFileSystemUtils::digitFileFormat("/page%1.svg", pageIndex);
-    qDebug() << fileName;
+    //qDebug() << fileName;
     QFile file(fileName);
 
     if (file.exists())
@@ -264,7 +264,7 @@ UBGraphicsScene* UBSvgSubsetAdaptor::loadScene(UBDocumentProxy* proxy, const int
 QByteArray UBSvgSubsetAdaptor::loadSceneAsText(UBDocumentProxy* proxy, const int pageIndex)
 {
     QString fileName = proxy->persistencePath() + UBFileSystemUtils::digitFileFormat("/page%1.svg", pageIndex);
-    qDebug() << fileName;
+    //qDebug() << fileName;
     QFile file(fileName);
 
     if (file.exists())
@@ -349,7 +349,7 @@ UBSvgSubsetAdaptor::UBSvgSubsetReader::UBSvgSubsetReader(UBDocumentProxy* pProxy
 
 UBGraphicsScene* UBSvgSubsetAdaptor::UBSvgSubsetReader::loadScene(UBDocumentProxy* proxy)
 {
-    qDebug() << "loadScene() : starting reading...";
+    //qDebug() << "loadScene() : starting reading...";
     QTime time;
     time.start();
     mScene = 0;
@@ -944,7 +944,7 @@ UBGraphicsScene* UBSvgSubsetAdaptor::UBSvgSubsetReader::loadScene(UBDocumentProx
         qWarning() << "error parsing file " << mXmlReader.errorString();
     }
 
-    qDebug() << "Number of detected strokes: " << mStrokesList.count();
+    //qDebug() << "Number of detected strokes: " << mStrokesList.count();
     QHashIterator<QString, UBGraphicsStrokesGroup*> iterator(mStrokesList);
     while (iterator.hasNext()) {
         iterator.next();
@@ -956,8 +956,8 @@ UBGraphicsScene* UBSvgSubsetAdaptor::UBSvgSubsetReader::loadScene(UBDocumentProx
         mScene->enableUndoRedoStack();
     }
 
-    qDebug() << "loadScene() : created scene and read file";
-    qDebug() << "spent milliseconds: " << time.elapsed();
+    //qDebug() << "loadScene() : created scene and read file";
+    //qDebug() << "spent milliseconds: " << time.elapsed();
     return mScene;
 }
 

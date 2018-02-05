@@ -30,6 +30,7 @@
 #include "XPDFRenderer.h"
 
 #include <QtGui>
+#include <QApplication>
 
 #include <frameworks/UBPlatformUtils.h>
 
@@ -151,6 +152,7 @@ int XPDFRenderer::pageRotation(int pageNumber) const
 
 void XPDFRenderer::render(QPainter *p, int pageNumber, const QRectF &bounds)
 {
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     if (isValid())
     {
         qreal xscale = p->worldTransform().m11();
@@ -163,10 +165,13 @@ void XPDFRenderer::render(QPainter *p, int pageNumber, const QRectF &bounds)
         p->setWorldTransform(savedTransform);
         delete pdfImage;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 QImage* XPDFRenderer::createPDFImage(int pageNumber, qreal xscale, qreal yscale, const QRectF &bounds)
 {
+    QTime t;
+    t.start();
     if (isValid())
     {
         SplashColor paperColor = {0xFF, 0xFF, 0xFF}; // white
@@ -195,9 +200,12 @@ QImage* XPDFRenderer::createPDFImage(int pageNumber, qreal xscale, qreal yscale,
 
             mDocument->displayPageSlice(mSplash, pageNumber, this->dpiForRendering * xscale, this->dpiForRendering * yscale,
                 rotation, useMediaBox, crop, printing, mSliceX, mSliceY, sliceW, sliceH);
+
+            qDebug() << "time spent to create Page Slice : " << t.elapsed() << "ms (pageNumber on PDF : " << pageNumber << ")";
         }
 
         mpSplashBitmap = mSplash->getBitmap();
     }
+
     return new QImage(mpSplashBitmap->getDataPtr(), mpSplashBitmap->getWidth(), mpSplashBitmap->getHeight(), mpSplashBitmap->getWidth() * 3, QImage::Format_RGB888);
 }

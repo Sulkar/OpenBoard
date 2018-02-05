@@ -58,7 +58,7 @@ UBBoardThumbnailsView::UBBoardThumbnailsView(QWidget *parent, const char *name)
     , mDropBar(new QGraphicsRectItem(0))
     , mLongPressInterval(350)
 {
-    setScene(new QGraphicsScene(this));    
+    setScene(new QGraphicsScene(this));
 
     mDropBar->setPen(QPen(Qt::darkGray));
     mDropBar->setBrush(QBrush(Qt::lightGray));
@@ -146,6 +146,8 @@ void UBBoardThumbnailsView::clearThumbnails()
 
 void UBBoardThumbnailsView::initThumbnails(UBDocumentContainer* source)
 {
+    QTime t;
+    t.start();
     clearThumbnails();
 
     for(int i = 0; i < source->selectedDocument()->pageCount(); i++)
@@ -157,6 +159,7 @@ void UBBoardThumbnailsView::initThumbnails(UBDocumentContainer* source)
     }
 
     updateThumbnailsPos();
+    qDebug() << "time spent in initThumbnails : " << t.elapsed() << "ms";
 }
 
 void UBBoardThumbnailsView::centerOnThumbnail(int index)
@@ -200,6 +203,7 @@ void UBBoardThumbnailsView::resizeEvent(QResizeEvent *event)
 
 void UBBoardThumbnailsView::mousePressEvent(QMouseEvent *event)
 {
+    QGraphicsView::mousePressEvent(event);
     mLongPressTimer.start();
     mLastPressedMousePos = event->pos();
 
@@ -212,8 +216,6 @@ void UBBoardThumbnailsView::mousePressEvent(QMouseEvent *event)
         UBApplication::boardController->setActiveDocumentScene(item->sceneIndex());
         UBApplication::boardController->centerOn(UBApplication::boardController->activeScene()->lastCenter());
     }
-
-    QGraphicsView::mousePressEvent(event);
 }
 
 void UBBoardThumbnailsView::mouseMoveEvent(QMouseEvent *event)
